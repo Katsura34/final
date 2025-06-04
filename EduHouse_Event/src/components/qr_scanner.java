@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package eduhouse_event.components;
+package components;
 import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
