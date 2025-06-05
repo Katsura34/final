@@ -106,6 +106,11 @@ public class home extends javax.swing.JFrame {
         accountsbutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         accountsbutton.setForeground(new java.awt.Color(255, 255, 255));
         accountsbutton.setText("Accounts");
+        accountsbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accountsbuttonActionPerformed(evt);
+            }
+        });
 
         attendancebutton.setBackground(new java.awt.Color(25, 42, 86));
         attendancebutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -259,6 +264,10 @@ public class home extends javax.swing.JFrame {
     private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_scanqrbuttonActionPerformed
+
+    private void accountsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountsbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_accountsbuttonActionPerformed
 
     /**
      * @param args the command line arguments
