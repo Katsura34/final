@@ -3,11 +3,20 @@ package loginandsignup;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 
 public class Login extends javax.swing.JFrame {
 
   
+ 
+    
+    
     public Login() {
         initComponents();
     }
@@ -163,18 +172,46 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
            String email = mail.getText();
-    String password = new String(pass.getPassword());
+           String password = new String(pass.getPassword());
 
-    if (email.equals("admin") && password.equals("admin")) {
-        JOptionPane.showMessageDialog(this, "Login successful!");
-        this.dispose();
+           
 
-        SwingUtilities.invokeLater(() -> {
-            //how
-        });
+    if (email.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+        return;
+    }
 
-    } else {
-        JOptionPane.showMessageDialog(this, "Invalid email or password.");
+    try {
+        // Load MySQL JDBC driver
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+               // Prepare SQL query
+               try ( // Connect to java_event_db
+                       Connection conn = DriverManager.getConnection(
+                               "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                               "root", // <-- your DB username
+                               ""      // <-- your DB password
+                       )) {
+                   // Prepare SQL query
+                   String query = "SELECT * FROM users WHERE email=? AND password=?";
+                   PreparedStatement stmt = conn.prepareStatement(query);
+                   stmt.setString(1, email);
+                   stmt.setString(2, password); // Note: Use hashing in production!
+                   
+                   ResultSet rs = stmt.executeQuery();
+                   
+                   if (rs.next()) {
+                       JOptionPane.showMessageDialog(this, "Login successful!");
+                       this.dispose();
+                       
+                   } else {
+                       JOptionPane.showMessageDialog(this, "Invalid email or password.");
+                   }      }
+
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(this, "MySQL JDBC Driver not found.");
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
     }
  
     }//GEN-LAST:event_jButton1ActionPerformed

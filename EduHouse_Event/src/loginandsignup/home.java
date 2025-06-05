@@ -3,13 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package loginandsignup;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 /**
  *
  * @author jeson
  */
 public class home extends javax.swing.JFrame {
 
+    
+    private Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
+        String username = "root";
+        String password = ""; // Add your password here if you have one
+
+        return DriverManager.getConnection(url, username, password);
+    }
+
+    
     /**
      * Creates new form home
      */
