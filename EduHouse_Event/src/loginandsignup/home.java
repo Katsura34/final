@@ -42,7 +42,21 @@ public class home extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        navbarpanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        dashboardbutton = new javax.swing.JButton();
+        eventsbutton = new javax.swing.JButton();
+        accountsbutton = new javax.swing.JButton();
+        attendancebutton = new javax.swing.JButton();
+        scanqrbutton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        mainpanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -61,26 +75,190 @@ public class home extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(700, 500));
         setResizable(false);
 
-        jPanel4.setBackground(new java.awt.Color(25, 42, 86));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.Y_AXIS));
+        navbarpanel.setBackground(new java.awt.Color(25, 42, 86));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("ACLC");
+        jLabel6.setAlignmentX(0.2F);
+
+        dashboardbutton.setBackground(new java.awt.Color(25, 42, 86));
+        dashboardbutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        dashboardbutton.setForeground(new java.awt.Color(255, 255, 255));
+        dashboardbutton.setText("Dashboard");
+        dashboardbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dashboardbuttonActionPerformed(evt);
+            }
+        });
+
+        eventsbutton.setBackground(new java.awt.Color(25, 42, 86));
+        eventsbutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        eventsbutton.setForeground(new java.awt.Color(255, 255, 255));
+        eventsbutton.setText("Events");
+        eventsbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eventsbuttonActionPerformed(evt);
+            }
+        });
+
+        accountsbutton.setBackground(new java.awt.Color(25, 42, 86));
+        accountsbutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        accountsbutton.setForeground(new java.awt.Color(255, 255, 255));
+        accountsbutton.setText("Accounts");
+
+        attendancebutton.setBackground(new java.awt.Color(25, 42, 86));
+        attendancebutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        attendancebutton.setForeground(new java.awt.Color(255, 255, 255));
+        attendancebutton.setText("Attendance");
+        attendancebutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attendancebuttonActionPerformed(evt);
+            }
+        });
+
+        scanqrbutton.setBackground(new java.awt.Color(25, 42, 86));
+        scanqrbutton.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        scanqrbutton.setForeground(new java.awt.Color(255, 255, 255));
+        scanqrbutton.setText("Scan QR");
+        scanqrbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scanqrbuttonActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("EDUHOUSE EVENTS");
+
+        javax.swing.GroupLayout navbarpanelLayout = new javax.swing.GroupLayout(navbarpanel);
+        navbarpanel.setLayout(navbarpanelLayout);
+        navbarpanelLayout.setHorizontalGroup(
+            navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(navbarpanelLayout.createSequentialGroup()
+                .addGroup(navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(navbarpanelLayout.createSequentialGroup()
+                        .addGroup(navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(navbarpanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel7))
+                            .addGroup(navbarpanelLayout.createSequentialGroup()
+                                .addGap(64, 64, 64)
+                                .addComponent(jLabel6)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(navbarpanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dashboardbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(eventsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(accountsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(attendancebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scanqrbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        navbarpanelLayout.setVerticalGroup(
+            navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(navbarpanelLayout.createSequentialGroup()
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addGap(31, 31, 31)
+                .addComponent(dashboardbutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(eventsbutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(accountsbutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(attendancebutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scanqrbutton)
+                .addContainerGap())
+        );
+
+        mainpanel.setBackground(new java.awt.Color(255, 255, 255));
+        mainpanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setText("Welcome, Student!");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setText("Upcoming Events");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel3.setText("Science Fair");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel4.setText("June 10, 2025 ----- 1:00 PM");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setText("Attendance: 90%");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 699, Short.MAX_VALUE))
+                .addComponent(navbarpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE))
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(navbarpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(29, 29, 29)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void eventsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eventsbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_eventsbuttonActionPerformed
+
+    private void dashboardbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dashboardbuttonActionPerformed
+
+    private void attendancebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendancebuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_attendancebuttonActionPerformed
+
+    private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_scanqrbuttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,8 +296,22 @@ public class home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton accountsbutton;
+    private javax.swing.JButton attendancebutton;
+    private javax.swing.JButton dashboardbutton;
+    private javax.swing.JButton eventsbutton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel mainpanel;
+    private javax.swing.JPanel navbarpanel;
+    private javax.swing.JButton scanqrbutton;
     // End of variables declaration//GEN-END:variables
 }
