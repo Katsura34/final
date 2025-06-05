@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.awt.*;
 /**
  *
  * @author jeson
@@ -51,12 +52,21 @@ public class home extends javax.swing.JFrame {
         scanqrbutton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         mainpanel = new javax.swing.JPanel();
+        dashboardpanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        eventspanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        accountspanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        attendancepanel = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        scanqrpanel = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -74,6 +84,8 @@ public class home extends javax.swing.JFrame {
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         setPreferredSize(new java.awt.Dimension(700, 500));
         setResizable(false);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         navbarpanel.setBackground(new java.awt.Color(25, 42, 86));
 
@@ -180,70 +192,142 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jPanel2.add(navbarpanel, java.awt.BorderLayout.WEST);
+
         mainpanel.setBackground(new java.awt.Color(255, 255, 255));
-        mainpanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        mainpanel.setLayout(new java.awt.CardLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Welcome, Student!");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("Dashboard");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Upcoming Events");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel3.setText("Science Fair");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel4.setText("June 10, 2025 ----- 1:00 PM");
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("Attendance: 90%");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(navbarpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(61, 61, 61)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addComponent(mainpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        javax.swing.GroupLayout dashboardpanelLayout = new javax.swing.GroupLayout(dashboardpanel);
+        dashboardpanel.setLayout(dashboardpanelLayout);
+        dashboardpanelLayout.setHorizontalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(navbarpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(mainpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+        dashboardpanelLayout.setVerticalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+
+        mainpanel.add(dashboardpanel, "card6");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setText("Events");
+
+        javax.swing.GroupLayout eventspanelLayout = new javax.swing.GroupLayout(eventspanel);
+        eventspanel.setLayout(eventspanelLayout);
+        eventspanelLayout.setHorizontalGroup(
+            eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eventspanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        eventspanelLayout.setVerticalGroup(
+            eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(eventspanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+
+        mainpanel.add(eventspanel, "card5");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setText("Accounts");
+
+        javax.swing.GroupLayout accountspanelLayout = new javax.swing.GroupLayout(accountspanel);
+        accountspanel.setLayout(accountspanelLayout);
+        accountspanelLayout.setHorizontalGroup(
+            accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(accountspanelLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        accountspanelLayout.setVerticalGroup(
+            accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(accountspanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+
+        mainpanel.add(accountspanel, "card4");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setText("Attendance");
+
+        javax.swing.GroupLayout attendancepanelLayout = new javax.swing.GroupLayout(attendancepanel);
+        attendancepanel.setLayout(attendancepanelLayout);
+        attendancepanelLayout.setHorizontalGroup(
+            attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(attendancepanelLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+        attendancepanelLayout.setVerticalGroup(
+            attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(attendancepanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
         );
+
+        mainpanel.add(attendancepanel, "card3");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel8.setText("Scan QR");
+
+        javax.swing.GroupLayout scanqrpanelLayout = new javax.swing.GroupLayout(scanqrpanel);
+        scanqrpanel.setLayout(scanqrpanelLayout);
+        scanqrpanelLayout.setHorizontalGroup(
+            scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scanqrpanelLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        scanqrpanelLayout.setVerticalGroup(
+            scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(scanqrpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(445, Short.MAX_VALUE))
+        );
+
+        mainpanel.add(scanqrpanel, "card2");
+
+        jPanel2.add(mainpanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -251,23 +335,33 @@ public class home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void eventsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eventsbuttonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                            
+            CardLayout cl = (CardLayout) mainpanel.getLayout();
+            cl.show(mainpanel, "card5");
     }//GEN-LAST:event_eventsbuttonActionPerformed
 
     private void dashboardbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardbuttonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                             
+            CardLayout cl = (CardLayout) mainpanel.getLayout();
+            cl.show(mainpanel, "card6");
     }//GEN-LAST:event_dashboardbuttonActionPerformed
 
     private void attendancebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendancebuttonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                             
+            CardLayout cl = (CardLayout) mainpanel.getLayout();
+            cl.show(mainpanel, "card3");       
     }//GEN-LAST:event_attendancebuttonActionPerformed
 
     private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                  
+            CardLayout cl = (CardLayout) mainpanel.getLayout();
+            cl.show(mainpanel, "card2");
     }//GEN-LAST:event_scanqrbuttonActionPerformed
 
     private void accountsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountsbuttonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                              
+            CardLayout cl = (CardLayout) mainpanel.getLayout();
+            cl.show(mainpanel, "card4");
     }//GEN-LAST:event_accountsbuttonActionPerformed
 
     /**
@@ -307,21 +401,30 @@ public class home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accountsbutton;
+    private javax.swing.JPanel accountspanel;
     private javax.swing.JButton attendancebutton;
+    private javax.swing.JPanel attendancepanel;
     private javax.swing.JButton dashboardbutton;
+    private javax.swing.JPanel dashboardpanel;
     private javax.swing.JButton eventsbutton;
+    private javax.swing.JPanel eventspanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JPanel navbarpanel;
     private javax.swing.JButton scanqrbutton;
+    private javax.swing.JPanel scanqrpanel;
     // End of variables declaration//GEN-END:variables
 }
