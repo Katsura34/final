@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: #003333;
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+    }
+    .sidebar button {
+      background: none;
+      border: none;
+      color: white;
+      padding: 10px;
+      margin: 5px 0;
+      text-align: left;
+      cursor: pointer;
+    }
+    .sidebar button:hover {
+      background-color: #005555;
+    }
+
+    .main {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .event {
+      padding: 15px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>ACLC</h2>
+    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('events')">Events</button>
+    <button onclick="showSection('accounts')">Accounts</button>
+    <button onclick="showSection('attendance')">Attendance</button>
+    <button onclick="scanQR()">Scan QR</button>
+  </div>
+
+  <div class="main" id="main-content">
+    <h1>Welcome, Student!</h1>
+    <h3>Upcoming Events</h3>
+    <div class="event">
+        <h3>Science Fair</h3>
+        <p>📅 June 10, 2025 — 🕐 1:00 PM</p>
+        <p>🎯 Attendance: 90%</p>
+        <div style="background: #ccc; border-radius: 5px; overflow: hidden; height: 18px; margin-top: 5px;">
+          <div style="width: 90%; background: #00cc99; height: 100%;"></div>
+        </div>
+      </div>
+
+  </div>
+
+  <script>
+    function showSection(section) {
+      document.getElementById('main-content').innerHTML = `<h2>Loading ${section}...</h2>`;
+      // You can load content dynamically or route to new HTML here
+    }
+
+    function scanQR() {
+      alert("scanQR"); // This will be intercepted by Java if needed
+    }
+  </script>
+</body>
+</html>
+
