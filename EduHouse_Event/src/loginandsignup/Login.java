@@ -170,7 +170,7 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
 
         SwingUtilities.invokeLater(() -> {
-            new DashboardWindow().setVisible(true);
+            //how
         });
 
     } else {
