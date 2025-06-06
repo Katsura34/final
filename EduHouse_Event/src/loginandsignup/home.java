@@ -9,20 +9,35 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.*;
+
+
+import com.google.zxing.*;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.videoio.VideoCapture;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 /**
  *
  * @author jeson
  */
 public class home extends javax.swing.JFrame {
-
     
-    private Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
-        String username = "root";
-        String password = ""; // Add your password here if you have one
-
-        return DriverManager.getConnection(url, username, password);
-    }
+    private Timer cameraTimer;
+    private VideoCapture videoCapture;
+    private int currentCameraIndex = 0;
+    private boolean scanning = true;
+    
 
     
     /**
@@ -30,6 +45,8 @@ public class home extends javax.swing.JFrame {
      */
     public home() {
         initComponents();
+     
+        
     }
 
     /**
@@ -65,8 +82,11 @@ public class home extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         scanqrpanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jSeparator5 = new javax.swing.JSeparator();
+        jPanel3 = new javax.swing.JPanel();
+        change_cam = new javax.swing.JComboBox<>();
+        camera = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -153,19 +173,16 @@ public class home extends javax.swing.JFrame {
         navbarpanelLayout.setHorizontalGroup(
             navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navbarpanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(navbarpanelLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jLabel7)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(navbarpanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(navbarpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dashboardbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(eventsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(accountsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(attendancebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(scanqrbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(dashboardbutton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(eventsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(accountsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(attendancebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scanqrbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(navbarpanelLayout.createSequentialGroup()
                 .addGap(65, 65, 65)
@@ -218,7 +235,7 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
         );
 
         mainpanel.add(dashboardpanel, "card6");
@@ -244,7 +261,7 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
         );
 
         mainpanel.add(eventspanel, "card5");
@@ -270,7 +287,7 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
         );
 
         mainpanel.add(accountspanel, "card4");
@@ -296,33 +313,66 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+                .addContainerGap(466, Short.MAX_VALUE))
         );
 
         mainpanel.add(attendancepanel, "card3");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel8.setText("Scan QR");
+        jPanel3.setBackground(new java.awt.Color(0, 3, 81));
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("QR Scanner");
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Select Camera:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(145, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(change_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(165, 165, 165))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(58, 58, 58))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(camera, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(change_cam, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(camera, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                .addGap(34, 34, 34))
+        );
 
         javax.swing.GroupLayout scanqrpanelLayout = new javax.swing.GroupLayout(scanqrpanel);
         scanqrpanel.setLayout(scanqrpanelLayout);
         scanqrpanelLayout.setHorizontalGroup(
             scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scanqrpanelLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         scanqrpanelLayout.setVerticalGroup(
             scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(scanqrpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(445, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         mainpanel.add(scanqrpanel, "card2");
@@ -332,36 +382,42 @@ public class home extends javax.swing.JFrame {
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void eventsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eventsbuttonActionPerformed
         // TODO add your handling code here:                                            
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card5");
+               stopCamera();
     }//GEN-LAST:event_eventsbuttonActionPerformed
 
     private void dashboardbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardbuttonActionPerformed
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card6");
+               stopCamera();
     }//GEN-LAST:event_dashboardbuttonActionPerformed
 
     private void attendancebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendancebuttonActionPerformed
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
-            cl.show(mainpanel, "card3");       
+            cl.show(mainpanel, "card3");  
+               stopCamera();
     }//GEN-LAST:event_attendancebuttonActionPerformed
 
     private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
         // TODO add your handling code here:                                  
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card2");
+            initCameraSystem();
     }//GEN-LAST:event_scanqrbuttonActionPerformed
 
     private void accountsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountsbuttonActionPerformed
         // TODO add your handling code here:                                              
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card4");
+            stopCamera();
     }//GEN-LAST:event_accountsbuttonActionPerformed
 
     /**
@@ -399,11 +455,161 @@ public class home extends javax.swing.JFrame {
         });
     }
 
+    
+    
+    
+     private void initCameraSystem() {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        listAvailableCameras();
+        startCamera(currentCameraIndex);
+
+        change_cam.addActionListener(e -> {
+            stopCamera();
+            currentCameraIndex = change_cam.getSelectedIndex();
+            startCamera(currentCameraIndex);
+        });
+    }
+
+    private void listAvailableCameras() {
+        change_cam.removeAllItems();
+        for (int i = 0; i < 5; i++) {
+            VideoCapture testCam = new VideoCapture(i);
+            if (testCam.isOpened()) {
+                change_cam.addItem("Camera " + i);
+                testCam.release();
+            }
+        }
+        if (change_cam.getItemCount() == 0) {
+            change_cam.addItem("No Camera Found");
+        }
+    }
+
+    private void startCamera(int cameraIndex) {
+        videoCapture = new VideoCapture(cameraIndex);
+        if (!videoCapture.isOpened()) {
+            System.out.println("Cannot open camera " + cameraIndex);
+            return;
+        }
+
+        cameraTimer = new Timer();
+        cameraTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!scanning) return;
+
+                Mat frame = new Mat();
+                if (videoCapture.read(frame)) {
+                    BufferedImage bufferedImage = matToBufferedImage(frame);
+                    camera.setIcon(new ImageIcon(bufferedImage.getScaledInstance(camera.getWidth(), camera.getHeight(), Image.SCALE_SMOOTH)));  
+                    readQRCode(bufferedImage);
+                }
+            }
+        }, 0, 10); 
+    }
+
+    private void stopCamera() {
+        if (cameraTimer != null) cameraTimer.cancel();
+        if (videoCapture != null && videoCapture.isOpened()) {
+            videoCapture.release();
+        }
+    }
+
+    private BufferedImage matToBufferedImage(Mat mat) {
+        int type = BufferedImage.TYPE_BYTE_GRAY;
+        if (mat.channels() > 1) {
+            type = BufferedImage.TYPE_3BYTE_BGR;
+        }
+        BufferedImage image = new BufferedImage(mat.width(), mat.height(), type);
+        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+        mat.get(0, 0, targetPixels);
+        return image;
+    }
+
+    private void readQRCode(BufferedImage image) {
+    try {
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        Result result = new MultiFormatReader().decode(bitmap);
+
+        if (result != null) {
+            String qrText = result.getText();
+            System.out.println("QR Code detected: " + qrText);
+            scanning = false;
+
+            boolean found = checkQRCodeInDatabase(qrText);
+
+            SwingUtilities.invokeLater(() -> {
+                if (found) {
+                    JOptionPane pane = new JOptionPane("✅ QR Code recognized: " + qrText, JOptionPane.INFORMATION_MESSAGE);
+                    JDialog dialog = pane.createDialog(this, "Success");
+                    dialog.setModal(false);
+                    dialog.setVisible(true);
+
+                    // Auto-close after 2 seconds
+                    new Timer().schedule(new java.util.TimerTask() {
+                        public void run() {
+                            dialog.setVisible(false);
+                            scanning = true;
+                        }
+                    }, 2000);
+                } else {
+                    JOptionPane.showMessageDialog(this, "❌ QR Code not found in the database.", "Error", JOptionPane.ERROR_MESSAGE);
+                    scanning = true;
+                }
+            });
+        }
+    } catch (NotFoundException e) {
+        // No QR found – ignore
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+   
+    private boolean checkQRCodeInDatabase(String qrText) {
+    boolean exists = false;
+    String url = "jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=CONVERT_TO_NULL"; // Change this
+    String user = "root";                            // Change this
+    String password = "";                        // Change this
+
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+        String sql = "SELECT * FROM qr_data WHERE qr_id = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, qrText);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            exists = true;
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return exists;
+}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accountsbutton;
     private javax.swing.JPanel accountspanel;
     private javax.swing.JButton attendancebutton;
     private javax.swing.JPanel attendancepanel;
+    private javax.swing.JLabel camera;
+    private javax.swing.JComboBox<String> change_cam;
     private javax.swing.JButton dashboardbutton;
     private javax.swing.JPanel dashboardpanel;
     private javax.swing.JButton eventsbutton;
@@ -412,16 +618,17 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JPanel navbarpanel;
     private javax.swing.JButton scanqrbutton;

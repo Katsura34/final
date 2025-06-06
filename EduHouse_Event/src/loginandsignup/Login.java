@@ -203,7 +203,7 @@ public class Login extends javax.swing.JFrame {
                    if (rs.next()) {
                        JOptionPane.showMessageDialog(this, "Login successful!");
                        this.dispose();
-                       
+                       new home().setVisible(true);
                    } else {
                        JOptionPane.showMessageDialog(this, "Invalid email or password.");
                    }      }
