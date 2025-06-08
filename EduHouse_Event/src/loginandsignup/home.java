@@ -3,13 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package loginandsignup;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.awt.*;
-
 
 import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
@@ -23,9 +16,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.ImageIcon;
+
+
+import java.sql.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.Arrays;
+import java.util.Vector;
+import javax.imageio.ImageIO;
 
 
 /**
@@ -33,22 +35,100 @@ import javax.swing.table.DefaultTableModel;
  * @author jeson
  */
 public class home extends javax.swing.JFrame {
-    
-    private Timer cameraTimer;
+     
+ private Timer cameraTimer;
     private VideoCapture videoCapture;
     private int currentCameraIndex = 0;
     private boolean scanning = true;
-    
 
-    
     /**
      * Creates new form home
      */
     public home() {
         initComponents();
-     
+            
+       
+        
+        
+   jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = jTable2.rowAtPoint(evt.getPoint());
+        int column = jTable2.columnAtPoint(evt.getPoint());
+
+        if (column == 5) { // QR column
+            Object value = jTable2.getValueAt(row, column);
+            if (value instanceof ImageIcon) {
+                ImageIcon qrIcon = (ImageIcon) value;
+
+                // Resize QR for popup
+                Image resized = qrIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+                ImageIcon resizedIcon = new ImageIcon(resized);
+                JLabel imageLabel = new JLabel(resizedIcon);
+
+                // Download button inside modal
+                JButton downloadBtn = new JButton("Save QR");
+                downloadBtn.addActionListener(e -> {
+                    BufferedImage buffered = new BufferedImage(300, 300, BufferedImage.TYPE_INT_RGB);
+                    Graphics2D g2d = buffered.createGraphics();
+                    g2d.drawImage(resized, 0, 0, null);
+                    g2d.dispose();
+
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setSelectedFile(new File("qr-code.png"));
+                    int result = chooser.showSaveDialog(null);
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        try {
+                            File file = chooser.getSelectedFile();
+                            ImageIO.write(buffered, "png", file);
+                            JOptionPane.showMessageDialog(null, "Saved to: " + file.getAbsolutePath());
+                        } catch (IOException ex) {
+                            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+                        }
+                    }
+                });
+
+                // Layout for modal
+                JPanel panel = new JPanel(new BorderLayout(10, 10));
+                panel.add(imageLabel, BorderLayout.CENTER);
+                panel.add(downloadBtn, BorderLayout.SOUTH);
+
+                JOptionPane.showMessageDialog(null, panel, "QR Code", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+    }
+});
+
+
+    
+        
+        
+        
+        
+     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+jTable2.setModel(new DefaultTableModel(
+    model.getDataVector(),
+    new Vector<>(Arrays.asList("Name", "Email", "Password", "Role", "House", "QR"))
+) {
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if (columnIndex == 5) return javax.swing.ImageIcon.class; // QR column index
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+
+jTable2.setRowHeight(100); 
         
     }
+
+
+   
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,6 +161,10 @@ public class home extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        searchtxt = new javax.swing.JTextField();
+        filters = new javax.swing.JComboBox<>();
+        seachtxt = new javax.swing.JButton();
+        add = new javax.swing.JButton();
         attendancepanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -231,7 +315,7 @@ public class home extends javax.swing.JFrame {
                 .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(211, Short.MAX_VALUE))
         );
         dashboardpanelLayout.setVerticalGroup(
             dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,7 +324,7 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(463, Short.MAX_VALUE))
+                .addContainerGap(500, Short.MAX_VALUE))
         );
 
         mainpanel.add(dashboardpanel, "card6");
@@ -257,7 +341,7 @@ public class home extends javax.swing.JFrame {
                 .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(201, Short.MAX_VALUE))
         );
         eventspanelLayout.setVerticalGroup(
             eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,10 +350,12 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(463, Short.MAX_VALUE))
+                .addContainerGap(500, Short.MAX_VALUE))
         );
 
         mainpanel.add(eventspanel, "card5");
+
+        accountspanel.setPreferredSize(new java.awt.Dimension(800, 600));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setText("Accounts");
@@ -295,21 +381,64 @@ public class home extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2);
 
+        searchtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchtxtActionPerformed(evt);
+            }
+        });
+
+        filters.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ALL", "CAHEL", "VIERRDY", "AZUL", "GALLIO", "ROXXO" }));
+        filters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtersActionPerformed(evt);
+            }
+        });
+
+        seachtxt.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        seachtxt.setText("Search");
+        seachtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seachtxtActionPerformed(evt);
+            }
+        });
+
+        add.setText("ADD");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout accountspanelLayout = new javax.swing.GroupLayout(accountspanel);
         accountspanel.setLayout(accountspanelLayout);
         accountspanelLayout.setHorizontalGroup(
             accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accountspanelLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
                 .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
-            .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(accountspanelLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
-                    .addContainerGap()))
+                    .addGroup(accountspanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2))
+                    .addGroup(accountspanelLayout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(accountspanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(seachtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(122, 122, 122))
+                            .addGroup(accountspanelLayout.createSequentialGroup()
+                                .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)))))
+                .addContainerGap())
+            .addGroup(accountspanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(filters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
         accountspanelLayout.setVerticalGroup(
             accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,13 +446,21 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(463, Short.MAX_VALUE))
-            .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(accountspanelLayout.createSequentialGroup()
-                    .addGap(44, 44, 44)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(accountspanelLayout.createSequentialGroup()
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(add)
+                            .addComponent(searchtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(accountspanelLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(accountspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(seachtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(filters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         mainpanel.add(accountspanel, "card4");
@@ -340,7 +477,7 @@ public class home extends javax.swing.JFrame {
                 .addGroup(attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(214, Short.MAX_VALUE))
         );
         attendancepanelLayout.setVerticalGroup(
             attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -349,12 +486,24 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(463, Short.MAX_VALUE))
+                .addContainerGap(500, Short.MAX_VALUE))
         );
 
         mainpanel.add(attendancepanel, "card3");
 
+        scanqrpanel.setBackground(new java.awt.Color(0, 3, 81));
+
         jPanel3.setBackground(new java.awt.Color(0, 3, 81));
+
+        change_cam.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                change_camActionPerformed(evt);
+            }
+        });
+
+        camera.setBackground(new java.awt.Color(255, 0, 0));
+        camera.setForeground(new java.awt.Color(255, 255, 255));
+        camera.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -370,19 +519,20 @@ public class home extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(145, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addGap(18, 18, 18)
-                .addComponent(change_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(165, 165, 165))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addContainerGap()
                 .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(58, 58, 58))
+                .addGap(26, 26, 26))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(camera, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(228, 228, 228)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(change_cam, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(201, 201, 201)
+                        .addComponent(camera, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,11 +541,11 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(change_cam, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(camera, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
-                .addGap(34, 34, 34))
+                    .addComponent(jLabel9)
+                    .addComponent(change_cam, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(camera, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(139, 139, 139))
         );
 
         javax.swing.GroupLayout scanqrpanelLayout = new javax.swing.GroupLayout(scanqrpanel);
@@ -403,8 +553,9 @@ public class home extends javax.swing.JFrame {
         scanqrpanelLayout.setHorizontalGroup(
             scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(scanqrpanelLayout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         scanqrpanelLayout.setVerticalGroup(
             scanqrpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -425,28 +576,50 @@ public class home extends javax.swing.JFrame {
         // TODO add your handling code here:                                            
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card5");
-               stopCamera();
+                stopCamera();
+
+              
     }//GEN-LAST:event_eventsbuttonActionPerformed
 
     private void dashboardbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardbuttonActionPerformed
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
-            cl.show(mainpanel, "card6");
-               stopCamera();
+                cl.show(mainpanel, "card6");
+                            stopCamera();
     }//GEN-LAST:event_dashboardbuttonActionPerformed
 
     private void attendancebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attendancebuttonActionPerformed
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card3");  
-               stopCamera();
+            stopCamera();
     }//GEN-LAST:event_attendancebuttonActionPerformed
 
     private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
         // TODO add your handling code here:                                  
-            CardLayout cl = (CardLayout) mainpanel.getLayout();
-            cl.show(mainpanel, "card2");
-            initCameraSystem();
+        CardLayout cl = (CardLayout) mainpanel.getLayout();
+        cl.show(mainpanel, "card2");
+
+        // Show loading animation dialog
+        final JDialog loadingDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Loading Scanner...", true);
+        JLabel loadingLabel = new JLabel("Initializing camera...", new javax.swing.ImageIcon(getClass().getResource("/Icon/loading.gif")), JLabel.CENTER);
+        loadingDialog.add(loadingLabel);
+        loadingDialog.setSize(200, 150);
+        loadingDialog.setLocationRelativeTo(this);
+
+        // Run init in another thread
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Simulate short delay
+                SwingUtilities.invokeLater(() -> initCameraSystem());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                loadingDialog.dispose();
+            }
+        }).start();
+
+        loadingDialog.setVisible(true);
     }//GEN-LAST:event_scanqrbuttonActionPerformed
 
     private void accountsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountsbuttonActionPerformed
@@ -454,48 +627,216 @@ public class home extends javax.swing.JFrame {
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card4");
             loadUserData();
-            stopCamera();
+         stopCamera();
+
     }//GEN-LAST:event_accountsbuttonActionPerformed
+
+    private void change_camActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_change_camActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_change_camActionPerformed
+
+    private void searchtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchtxtActionPerformed
+
+    private void seachtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seachtxtActionPerformed
+      String keyword = searchtxt.getText().trim();
+    String filterLabel = (String) filters.getSelectedItem();
+
+   
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    model.setRowCount(0); // Clear existing data
+
+    
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", ""
+        );
+
+        String query;
+        PreparedStatement stmt;
+
+        if ("ALL".equalsIgnoreCase(filterLabel)) {
+            query = "SELECT name, email, password, role, house, qr_code FROM users WHERE name LIKE ? OR email LIKE ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, "%" + keyword + "%");
+            stmt.setString(2, "%" + keyword + "%");
+        } else {
+            query = "SELECT name, email, password, role, house, qr_code FROM users WHERE house = ? AND (name LIKE ? OR email LIKE ?)";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, filterLabel);
+            stmt.setString(2, "%" + keyword + "%");
+            stmt.setString(3, "%" + keyword + "%");
+        }
+
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            String name = rs.getString("name");
+            String email = rs.getString("email");
+            String password = rs.getString("password");
+            String role = rs.getString("role");
+            String house = rs.getString("house");
+            String qrCode = rs.getString("qr_code");
+
+            // Generate QR code as icon
+            ImageIcon qrIcon = null;
+            
+            try {
+                com.google.zxing.Writer writer = new com.google.zxing.qrcode.QRCodeWriter();
+                com.google.zxing.common.BitMatrix matrix = writer.encode(qrCode, com.google.zxing.BarcodeFormat.QR_CODE, 100, 100);
+                java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(100, 100, java.awt.image.BufferedImage.TYPE_INT_RGB);
+                for (int x = 0; x < 100; x++) {
+                    for (int y = 0; y < 100; y++) {
+                        image.setRGB(x, y, matrix.get(x, y) ? java.awt.Color.BLACK.getRGB() : java.awt.Color.WHITE.getRGB());
+                    }
+                }
+                qrIcon = new javax.swing.ImageIcon(image);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            model.addRow(new Object[]{name, email, password, role, house, qrIcon});
+        }
+
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Search error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_seachtxtActionPerformed
+
+    private void filtersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtersActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_filtersActionPerformed
+
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+           JTextField nameField = new JTextField();
+    JTextField emailField = new JTextField();
+    JTextField passwordField = new JTextField();
+    JComboBox<String> roleCombo = new JComboBox<>(new String[]{"admin", "cometi", "student"});
+    JComboBox<String> houseCombo = new JComboBox<>(new String[]{"CAHEL", "VIERRDY", "AZUL", "GALLIO", "ROXXO"});
+
+    JPanel panel = new JPanel(new java.awt.GridLayout(0, 1));
+    panel.add(new JLabel("Name:"));
+    panel.add(nameField);
+    panel.add(new JLabel("Email:"));
+    panel.add(emailField);
+    panel.add(new JLabel("Password:"));
+    panel.add(passwordField);
+    panel.add(new JLabel("Role:"));
+    panel.add(roleCombo);
+    panel.add(new JLabel("House:"));
+    panel.add(houseCombo);
+
+    int result = JOptionPane.showConfirmDialog(null, panel, "Add New Account",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+        String name = nameField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        String role = (String) roleCombo.getSelectedItem();
+        String house = (String) houseCombo.getSelectedItem();
+        String qrCode = java.util.UUID.randomUUID().toString();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "root", ""
+            );
+            String insert = "INSERT INTO users (name, email, password, role, house, qr_code) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(insert);
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, role);
+            stmt.setString(5, house);
+            stmt.setString(6, qrCode);
+
+            int rows = stmt.executeUpdate();
+            conn.close();
+
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(null, "Account added successfully!");
+                loadUserData();
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to add account.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
+    
+    }//GEN-LAST:event_addActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new home().setVisible(true);
-            }
-        });
+     
     }
 
     
+  
     
     
-     private void initCameraSystem() {
+  private void loadUserData() {
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+    model.setRowCount(0); // Clear existing rows
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", ""  // your password
+        );
+
+        String query = "SELECT name, email, password, role, house, qr_code FROM users";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            String name = rs.getString("name");
+            String email = rs.getString("email");
+            String password = rs.getString("password");
+            String role = rs.getString("role");
+            String house = rs.getString("house");
+            String qrCode = rs.getString("qr_code");
+
+            // Generate QR code image as ImageIcon
+            ImageIcon qrIcon = null;
+            try {
+                com.google.zxing.Writer writer = new com.google.zxing.qrcode.QRCodeWriter();
+                com.google.zxing.common.BitMatrix matrix = writer.encode(qrCode, com.google.zxing.BarcodeFormat.QR_CODE, 100, 100);
+                java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(100, 100, java.awt.image.BufferedImage.TYPE_INT_RGB);
+                for (int x = 0; x < 100; x++) {
+                    for (int y = 0; y < 100; y++) {
+                        image.setRGB(x, y, matrix.get(x, y) ? java.awt.Color.BLACK.getRGB() : java.awt.Color.WHITE.getRGB());
+                    }
+                }
+                qrIcon = new javax.swing.ImageIcon(image);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            model.addRow(new Object[]{name, email, password, role, house, qrIcon});
+        }
+
+        // Set row height to fit the QR code image
+        jTable2.setRowHeight(100);
+
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
+    }
+}
+
+    private void initCameraSystem() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         listAvailableCameras();
         startCamera(currentCameraIndex);
@@ -625,45 +966,7 @@ public class home extends javax.swing.JFrame {
     return exists;
 }
     
-    
-    
-    
-    
-  private void loadUserData() {
-        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-        model.setRowCount(0); // Clear existing rows
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-                "root", // your username
-                ""     // your password
-            );
-
-            String query = "SELECT name, email, password, role, house, qr_code FROM users";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String password = rs.getString("password");
-                String role = rs.getString("role");
-                String house = rs.getString("house");
-                String qrCode = rs.getString("qr_code");
-                model.addRow(new Object[]{name, email, password, role, house, qrCode});
-            }
-
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
-        }
-    }   
-    
-    
-    
+  
     
     
     
@@ -674,6 +977,7 @@ public class home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton accountsbutton;
     private javax.swing.JPanel accountspanel;
+    private javax.swing.JButton add;
     private javax.swing.JButton attendancebutton;
     private javax.swing.JPanel attendancepanel;
     private javax.swing.JLabel camera;
@@ -682,6 +986,7 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JPanel dashboardpanel;
     private javax.swing.JButton eventsbutton;
     private javax.swing.JPanel eventspanel;
+    private javax.swing.JComboBox<String> filters;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -703,5 +1008,7 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JPanel navbarpanel;
     private javax.swing.JButton scanqrbutton;
     private javax.swing.JPanel scanqrpanel;
+    private javax.swing.JButton seachtxt;
+    private javax.swing.JTextField searchtxt;
     // End of variables declaration//GEN-END:variables
 }
