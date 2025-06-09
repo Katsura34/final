@@ -11,4 +11,5 @@ package loginandsignup;
 public class LoginUserSession {
     public static int userId;
     public static String qrCode;
+    public static String role; 
 }

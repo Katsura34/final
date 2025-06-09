@@ -196,6 +196,7 @@ public class Login extends javax.swing.JFrame {
                     // Store user ID and QR code to public static session class
                     LoginUserSession.userId = rs.getInt("user_id");
                     LoginUserSession.qrCode = rs.getString("qr_code");
+                    LoginUserSession.role = rs.getString("role");
 
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     this.dispose();

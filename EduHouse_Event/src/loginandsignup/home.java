@@ -40,14 +40,37 @@ public class home extends javax.swing.JFrame {
     private VideoCapture videoCapture;
     private int currentCameraIndex = 0;
     private boolean scanning = true;
+    
 
     /**
      * Creates new form home
      */
     public home() {
         initComponents();
-            
-       
+        
+       String role = LoginUserSession.role;
+       if ("admin".equalsIgnoreCase(role)) {
+    // Admin can see everything
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(true);
+    attendancebutton.setVisible(true);
+    scanqrbutton.setVisible(true);
+    
+} else if ("committee".equalsIgnoreCase(role)) {
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(false);
+    attendancebutton.setVisible(true);
+    scanqrbutton.setVisible(true);
+    
+} else if ("student".equalsIgnoreCase(role)) {
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(false);
+    attendancebutton.setVisible(false);
+    scanqrbutton.setVisible(false);
+}
         
         
    jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -716,7 +739,7 @@ jTable2.setRowHeight(100);
            JTextField nameField = new JTextField();
     JTextField emailField = new JTextField();
     JTextField passwordField = new JTextField();
-    JComboBox<String> roleCombo = new JComboBox<>(new String[]{"admin", "cometi", "student"});
+    JComboBox<String> roleCombo = new JComboBox<>(new String[]{"admin", "committee", "student"});
     JComboBox<String> houseCombo = new JComboBox<>(new String[]{"CAHEL", "VIERRDY", "AZUL", "GALLIO", "ROXXO"});
 
     JPanel panel = new JPanel(new java.awt.GridLayout(0, 1));
