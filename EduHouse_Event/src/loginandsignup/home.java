@@ -8,6 +8,10 @@ import com.google.zxing.*;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.toedter.calendar.JCalendar;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -24,6 +28,7 @@ import javax.swing.ImageIcon;
 
 
 import java.sql.*;
+import java.time.LocalDate;
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
 import java.util.Vector;
@@ -40,6 +45,8 @@ public class home extends javax.swing.JFrame {
     private VideoCapture videoCapture;
     private int currentCameraIndex = 0;
     private boolean scanning = true;
+    private int currentEventId = -1;
+
     
 
     /**
@@ -129,10 +136,10 @@ public class home extends javax.swing.JFrame {
         
         
      DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-jTable2.setModel(new DefaultTableModel(
-    model.getDataVector(),
-    new Vector<>(Arrays.asList("Name", "Email", "Password", "Role", "House", "QR"))
-) {
+        jTable2.setModel(new DefaultTableModel(
+            model.getDataVector(),
+            new Vector<>(Arrays.asList("Name", "Email", "Password", "Role", "House", "QR"))
+        ) {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         if (columnIndex == 5) return javax.swing.ImageIcon.class; // QR column index
@@ -178,7 +185,8 @@ jTable2.setRowHeight(100);
         jSeparator1 = new javax.swing.JSeparator();
         eventspanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
+        calendarPanel = new javax.swing.JPanel();
+        eventPanel = new javax.swing.JPanel();
         accountspanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -338,7 +346,7 @@ jTable2.setRowHeight(100);
                 .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(211, Short.MAX_VALUE))
+                .addContainerGap(320, Short.MAX_VALUE))
         );
         dashboardpanelLayout.setVerticalGroup(
             dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -347,7 +355,7 @@ jTable2.setRowHeight(100);
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addContainerGap(556, Short.MAX_VALUE))
         );
 
         mainpanel.add(dashboardpanel, "card6");
@@ -355,25 +363,55 @@ jTable2.setRowHeight(100);
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Events");
 
+        javax.swing.GroupLayout calendarPanelLayout = new javax.swing.GroupLayout(calendarPanel);
+        calendarPanel.setLayout(calendarPanelLayout);
+        calendarPanelLayout.setHorizontalGroup(
+            calendarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 478, Short.MAX_VALUE)
+        );
+        calendarPanelLayout.setVerticalGroup(
+            calendarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 511, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout eventPanelLayout = new javax.swing.GroupLayout(eventPanel);
+        eventPanel.setLayout(eventPanelLayout);
+        eventPanelLayout.setHorizontalGroup(
+            eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 201, Short.MAX_VALUE)
+        );
+        eventPanelLayout.setVerticalGroup(
+            eventPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout eventspanelLayout = new javax.swing.GroupLayout(eventspanel);
         eventspanel.setLayout(eventspanelLayout);
         eventspanelLayout.setHorizontalGroup(
             eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eventspanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(201, Short.MAX_VALUE))
+                    .addGroup(eventspanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(eventspanelLayout.createSequentialGroup()
+                        .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         eventspanelLayout.setVerticalGroup(
             eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eventspanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
+                .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(eventspanelLayout.createSequentialGroup()
+                        .addComponent(calendarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         mainpanel.add(eventspanel, "card5");
@@ -601,6 +639,7 @@ jTable2.setRowHeight(100);
             cl.show(mainpanel, "card5");
                 stopCamera();
 
+               setupCalendarAndEvents();
               
     }//GEN-LAST:event_eventsbuttonActionPerformed
 
@@ -620,29 +659,12 @@ jTable2.setRowHeight(100);
 
     private void scanqrbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scanqrbuttonActionPerformed
         // TODO add your handling code here:                                  
-        CardLayout cl = (CardLayout) mainpanel.getLayout();
-        cl.show(mainpanel, "card2");
+       // Show the scanner panel
+    CardLayout cl = (CardLayout) mainpanel.getLayout();
+    cl.show(mainpanel, "card2");
 
-        // Show loading animation dialog
-        final JDialog loadingDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Loading Scanner...", true);
-        JLabel loadingLabel = new JLabel("Initializing camera...", new javax.swing.ImageIcon(getClass().getResource("/Icon/loading.gif")), JLabel.CENTER);
-        loadingDialog.add(loadingLabel);
-        loadingDialog.setSize(200, 150);
-        loadingDialog.setLocationRelativeTo(this);
-
-        // Run init in another thread
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000); // Simulate short delay
-                SwingUtilities.invokeLater(() -> initCameraSystem());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                loadingDialog.dispose();
-            }
-        }).start();
-
-        loadingDialog.setVisible(true);
+    // Directly initialize the camera
+    initCameraSystem();
     }//GEN-LAST:event_scanqrbuttonActionPerformed
 
     private void accountsbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountsbuttonActionPerformed
@@ -796,18 +818,8 @@ jTable2.setRowHeight(100);
     
     }//GEN-LAST:event_addActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-     
-    }
-
     
-  
-    
-    
-  private void loadUserData() {
+    private void loadUserData() {
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
     model.setRowCount(0); // Clear existing rows
 
@@ -937,7 +949,8 @@ jTable2.setRowHeight(100);
             System.out.println("QR Code detected: " + qrText);
             scanning = false;
 
-            boolean found = checkQRCodeInDatabase(qrText);
+            boolean found = checkQRCodeInDatabase(qrText, currentEventId);
+
 
             SwingUtilities.invokeLater(() -> {
                 if (found) {
@@ -966,35 +979,218 @@ jTable2.setRowHeight(100);
     }
 }
    
-    private boolean checkQRCodeInDatabase(String qrText) {
+    private boolean checkQRCodeInDatabase(String qrText, int eventId) {
     boolean exists = false;
-    String url = "jdbc:mysql://localhost:3306/test?zeroDateTimeBehavior=CONVERT_TO_NULL"; // Change this
-    String user = "root";                            // Change this
-    String password = "";                        // Change this
+
+    String url = "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    String user = "root";
+    String password = "";
 
     try (Connection conn = DriverManager.getConnection(url, user, password)) {
-        String sql = "SELECT * FROM qr_data WHERE qr_id = ?";
+        // 1. Get the user by QR
+        String sql = "SELECT user_id, house FROM users WHERE qr_code = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, qrText);
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
+            int scannedUserId = rs.getInt("user_id");
+            String scannedHouse = rs.getString("house");
             exists = true;
+
+            // 2. Get the current user's house (committee/admin)
+            String myHouse = "";
+            PreparedStatement myStmt = conn.prepareStatement("SELECT house FROM users WHERE user_id = ?");
+            myStmt.setInt(1, LoginUserSession.userId);
+            ResultSet myRs = myStmt.executeQuery();
+            if (myRs.next()) {
+                myHouse = myRs.getString("house");
+            }
+
+            // 3. Check house match
+            if (LoginUserSession.role.equalsIgnoreCase("committee") ||
+                LoginUserSession.role.equalsIgnoreCase("admin")) {
+
+                if (scannedHouse.equalsIgnoreCase(myHouse)) {
+                    // 4. Check if already attended
+                    PreparedStatement checkStmt = conn.prepareStatement(
+                        "SELECT * FROM event_attendance WHERE event_id = ? AND user_id = ?");
+                    checkStmt.setInt(1, eventId);
+                    checkStmt.setInt(2, scannedUserId);
+                    ResultSet checkRs = checkStmt.executeQuery();
+
+                    if (!checkRs.next()) {
+                        // 5. Insert attendance
+                        PreparedStatement insertStmt = conn.prepareStatement(
+                            "INSERT INTO event_attendance (event_id, user_id, timestamp) VALUES (?, ?, NOW())");
+                        insertStmt.setInt(1, eventId);
+                        insertStmt.setInt(2, scannedUserId);
+                        insertStmt.executeUpdate();
+
+                        System.out.println("Attendance recorded for user: " + scannedUserId);
+                    } else {
+                        System.out.println("User already attended.");
+                    }
+
+                    checkRs.close();
+                    checkStmt.close();
+                } else {
+                    System.out.println("House does not match.");
+                    return false;
+                }
+            }
         }
 
+        rs.close();
+        stmt.close();
     } catch (Exception e) {
         e.printStackTrace();
     }
 
     return exists;
 }
+
+    private void loadEventsForDate(Date date) {
+          eventPanel.removeAll();
+
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                    "root", "");  // use your credentials
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String sqlDate = sdf.format(date);
+
+                String query = "SELECT event_id, event_name, start_time, end_time, description FROM events WHERE event_date = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, sqlDate);
+
+                ResultSet rs = stmt.executeQuery();
+
+                String[] columns;
+                boolean canScan = LoginUserSession.role.equalsIgnoreCase("admin")
+                               || LoginUserSession.role.equalsIgnoreCase("committee");
+
+                if (LoginUserSession.role.equalsIgnoreCase("student")) {
+                    columns = new String[]{"Event", "Start Time", "End Time", "Description", "Status", "Event ID"};
+                } else if (canScan) {
+                    columns = new String[]{"Event", "Start Time", "End Time", "Description", "Action", "Event ID"};
+                } else {
+                    columns = new String[]{"Event", "Start Time", "End Time", "Description", "Event ID"};
+                }
+
+                DefaultTableModel model = new DefaultTableModel(columns, 0);
+
+                while (rs.next()) {
+                    int eventId = rs.getInt("event_id");
+                    String eventName = rs.getString("event_name");
+                    String startTime = rs.getString("start_time");
+                    String endTime = rs.getString("end_time");
+                    String description = rs.getString("description");
+
+                    if (LoginUserSession.role.equalsIgnoreCase("student")) {
+                        String status = "";
+                        LocalDate today = LocalDate.now();
+
+                        PreparedStatement checkStmt = conn.prepareStatement(
+                            "SELECT * FROM event_attendance ea JOIN events e ON e.event_id = ea.event_id " +
+                            "WHERE ea.user_id = ? AND e.event_name = ? AND e.event_date = ?"
+                        );
+                        checkStmt.setInt(1, LoginUserSession.userId);
+                        checkStmt.setString(2, eventName);
+                        checkStmt.setString(3, sqlDate);
+                        ResultSet checkRs = checkStmt.executeQuery();
+
+                        if (checkRs.next()) {
+                            status = "Attended";
+                        } else if (LocalDate.parse(sqlDate).isBefore(today)) {
+                            status = "Missed";
+                        } else {
+                            status = "Upcoming";
+                        }
+
+                        model.addRow(new Object[]{eventName, startTime, endTime, description, status, eventId});
+                        checkRs.close();
+                        checkStmt.close();
+                    } else if (canScan) {
+                        model.addRow(new Object[]{eventName, startTime, endTime, description, "Scan QR", eventId});
+                    } else {
+                        model.addRow(new Object[]{eventName, startTime, endTime, description, eventId});
+                    }
+                }
+
+                JTable eventTable = new JTable(model) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        if (canScan) {
+                            Object val = getValueAt(row, column);
+                            return "Scan QR".equals(val);
+                        }
+                        return false;
+                    }
+                };
+
+                // Hide Event ID column from view
+                eventTable.getColumnModel().getColumn(eventTable.getColumnCount() - 1).setMinWidth(0);
+                eventTable.getColumnModel().getColumn(eventTable.getColumnCount() - 1).setMaxWidth(0);
+                eventTable.getColumnModel().getColumn(eventTable.getColumnCount() - 1).setWidth(0);
+
+                // Add click listener for "Scan QR"
+               if (canScan) {
+                eventTable.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        int row = eventTable.rowAtPoint(evt.getPoint());
+                        int col = eventTable.columnAtPoint(evt.getPoint());
+
+                        // Check if the clicked cell is the "Scan QR" button column
+                        if (col == 4) {
+                            // Get event ID from the hidden column
+                            int eventId = (int) eventTable.getValueAt(row, eventTable.getColumnCount() - 1);
+
+                            // Store event ID temporarily (so QR scan knows which event to log for)
+                            currentEventId = eventId;
+                            System.out.println("Selected Event ID set to: " + currentEventId);
+
+                            // Switch to QR Scanner panel
+                            CardLayout cl = (CardLayout) mainpanel.getLayout();
+                            cl.show(mainpanel, "card2");
+
+                            // Start the camera scanner
+                            initCameraSystem();
+                        }
+                    }
+                });
+            }
+
+
+                eventPanel.add(new JScrollPane(eventTable), BorderLayout.CENTER);
+                conn.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                eventPanel.add(new JLabel("Failed to load events"), BorderLayout.CENTER);
+            }
+
+            eventPanel.revalidate();
+            eventPanel.repaint();
+        }
+
     
-  
     
-    
-    
-    
-    
+    private void setupCalendarAndEvents() {
+        JCalendar calendar = new JCalendar();
+        calendarPanel.setLayout(new BorderLayout());
+        calendarPanel.add(calendar, BorderLayout.CENTER);
+
+        eventPanel.setLayout(new BorderLayout());
+        eventPanel.add(new JLabel("No event selected", SwingConstants.CENTER), BorderLayout.CENTER);
+
+        calendar.addPropertyChangeListener("calendar", evt -> {
+            Date selectedDate = calendar.getDate();
+            loadEventsForDate(selectedDate);
+        });
+    }
+
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1003,10 +1199,12 @@ jTable2.setRowHeight(100);
     private javax.swing.JButton add;
     private javax.swing.JButton attendancebutton;
     private javax.swing.JPanel attendancepanel;
+    private javax.swing.JPanel calendarPanel;
     private javax.swing.JLabel camera;
     private javax.swing.JComboBox<String> change_cam;
     private javax.swing.JButton dashboardbutton;
     private javax.swing.JPanel dashboardpanel;
+    private javax.swing.JPanel eventPanel;
     private javax.swing.JButton eventsbutton;
     private javax.swing.JPanel eventspanel;
     private javax.swing.JComboBox<String> filters;
@@ -1023,7 +1221,6 @@ jTable2.setRowHeight(100);
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTable jTable2;
