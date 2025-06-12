@@ -34,6 +34,12 @@ import java.util.Arrays;
 import java.util.Vector;
 import javax.imageio.ImageIO;
 
+import org.jdatepicker.impl.*;  // Make sure jdatepicker JAR is added to your project
+import javax.swing.SpinnerDateModel;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
 
 /**
  *
@@ -46,6 +52,8 @@ public class home extends javax.swing.JFrame {
     private int currentCameraIndex = 0;
     private boolean scanning = true;
     private int currentEventId = -1;
+    
+    
 
     
 
@@ -54,32 +62,11 @@ public class home extends javax.swing.JFrame {
      */
     public home() {
         initComponents();
-        
-       String role = LoginUserSession.role;
-       if ("admin".equalsIgnoreCase(role)) {
-    // Admin can see everything
-    dashboardbutton.setVisible(true);
-    eventsbutton.setVisible(true);
-    accountsbutton.setVisible(true);
-    attendancebutton.setVisible(true);
-    scanqrbutton.setVisible(true);
     
-} else if ("committee".equalsIgnoreCase(role)) {
-    dashboardbutton.setVisible(true);
-    eventsbutton.setVisible(true);
-    accountsbutton.setVisible(false);
-    attendancebutton.setVisible(true);
-    scanqrbutton.setVisible(true);
-    
-} else if ("student".equalsIgnoreCase(role)) {
-    dashboardbutton.setVisible(true);
-    eventsbutton.setVisible(true);
-    accountsbutton.setVisible(false);
-    attendancebutton.setVisible(false);
-    scanqrbutton.setVisible(false);
-}
         
         
+        
+                      
    jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -153,7 +140,34 @@ public class home extends javax.swing.JFrame {
 });
 
 jTable2.setRowHeight(100); 
-        
+
+
+
+             String role = LoginUserSession.role;
+       if ("admin".equalsIgnoreCase(role)) {
+    // Admin can see everything
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(true);
+    attendancebutton.setVisible(true);
+    scanqrbutton.setVisible(false);
+    
+} else if ("committee".equalsIgnoreCase(role)) {
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(false);
+    attendancebutton.setVisible(true);
+    scanqrbutton.setVisible(false);
+    
+} else if ("student".equalsIgnoreCase(role)) {
+    dashboardbutton.setVisible(true);
+    eventsbutton.setVisible(true);
+    accountsbutton.setVisible(false);
+    attendancebutton.setVisible(false);
+    scanqrbutton.setVisible(false);
+}
+   
+
     }
 
 
@@ -187,6 +201,7 @@ jTable2.setRowHeight(100);
         jLabel2 = new javax.swing.JLabel();
         calendarPanel = new javax.swing.JPanel();
         eventPanel = new javax.swing.JPanel();
+        addEvent = new javax.swing.JButton();
         accountspanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -199,6 +214,7 @@ jTable2.setRowHeight(100);
         attendancepanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
+        viewAttendance = new javax.swing.JPanel();
         scanqrpanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         change_cam = new javax.swing.JComboBox<>();
@@ -220,7 +236,6 @@ jTable2.setRowHeight(100);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("home");
         setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        setPreferredSize(new java.awt.Dimension(900, 700));
         setResizable(false);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -371,7 +386,7 @@ jTable2.setRowHeight(100);
         );
         calendarPanelLayout.setVerticalGroup(
             calendarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout eventPanelLayout = new javax.swing.GroupLayout(eventPanel);
@@ -385,28 +400,40 @@ jTable2.setRowHeight(100);
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        addEvent.setText("ADD");
+        addEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEventActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout eventspanelLayout = new javax.swing.GroupLayout(eventspanel);
         eventspanel.setLayout(eventspanelLayout);
         eventspanelLayout.setHorizontalGroup(
             eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eventspanelLayout.createSequentialGroup()
-                .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(eventspanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(eventspanelLayout.createSequentialGroup()
-                        .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(eventspanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addEvent)
+                .addGap(34, 34, 34))
         );
         eventspanelLayout.setVerticalGroup(
             eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(eventspanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
-                .addGap(14, 14, 14)
+                .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(eventspanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(14, 14, 14))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, eventspanelLayout.createSequentialGroup()
+                        .addComponent(addEvent)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(eventspanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(eventPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(eventspanelLayout.createSequentialGroup()
@@ -529,6 +556,17 @@ jTable2.setRowHeight(100);
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setText("Attendance");
 
+        javax.swing.GroupLayout viewAttendanceLayout = new javax.swing.GroupLayout(viewAttendance);
+        viewAttendance.setLayout(viewAttendanceLayout);
+        viewAttendanceLayout.setHorizontalGroup(
+            viewAttendanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        viewAttendanceLayout.setVerticalGroup(
+            viewAttendanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 494, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout attendancepanelLayout = new javax.swing.GroupLayout(attendancepanel);
         attendancepanel.setLayout(attendancepanelLayout);
         attendancepanelLayout.setHorizontalGroup(
@@ -539,6 +577,7 @@ jTable2.setRowHeight(100);
                     .addComponent(jLabel4)
                     .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(214, Short.MAX_VALUE))
+            .addComponent(viewAttendance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         attendancepanelLayout.setVerticalGroup(
             attendancepanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -547,7 +586,8 @@ jTable2.setRowHeight(100);
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(viewAttendance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         mainpanel.add(attendancepanel, "card3");
@@ -671,7 +711,7 @@ jTable2.setRowHeight(100);
         // TODO add your handling code here:                                              
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card4");
-            loadUserData();
+           loadUserData();
          stopCamera();
 
     }//GEN-LAST:event_accountsbuttonActionPerformed
@@ -818,56 +858,105 @@ jTable2.setRowHeight(100);
     
     }//GEN-LAST:event_addActionPerformed
 
-    
-    private void loadUserData() {
-    DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
-    model.setRowCount(0); // Clear existing rows
+    private void addEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEventActionPerformed
+    JTextField nameField = new JTextField();
 
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-            "root", ""  // your password
-        );
+    // --- Date Picker ---
+    UtilDateModel dateModel = new UtilDateModel();
+    Properties p = new Properties();
+    p.put("text.today", "Today");
+    p.put("text.month", "Month");
+    p.put("text.year", "Year");
+    JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+    JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 
-        String query = "SELECT name, email, password, role, house, qr_code FROM users";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        ResultSet rs = stmt.executeQuery();
+    // --- Start Time Spinner ---
+    SpinnerDateModel startModel = new SpinnerDateModel();
+    JSpinner startTimeSpinner = new JSpinner(startModel);
+    startTimeSpinner.setEditor(new JSpinner.DateEditor(startTimeSpinner, "HH:mm:ss"));
 
-        while (rs.next()) {
-            String name = rs.getString("name");
-            String email = rs.getString("email");
-            String password = rs.getString("password");
-            String role = rs.getString("role");
-            String house = rs.getString("house");
-            String qrCode = rs.getString("qr_code");
+    // --- End Time Spinner ---
+    SpinnerDateModel endModel = new SpinnerDateModel();
+    JSpinner endTimeSpinner = new JSpinner(endModel);
+    endTimeSpinner.setEditor(new JSpinner.DateEditor(endTimeSpinner, "HH:mm:ss"));
 
-            // Generate QR code image as ImageIcon
-            ImageIcon qrIcon = null;
-            try {
-                com.google.zxing.Writer writer = new com.google.zxing.qrcode.QRCodeWriter();
-                com.google.zxing.common.BitMatrix matrix = writer.encode(qrCode, com.google.zxing.BarcodeFormat.QR_CODE, 100, 100);
-                java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(100, 100, java.awt.image.BufferedImage.TYPE_INT_RGB);
-                for (int x = 0; x < 100; x++) {
-                    for (int y = 0; y < 100; y++) {
-                        image.setRGB(x, y, matrix.get(x, y) ? java.awt.Color.BLACK.getRGB() : java.awt.Color.WHITE.getRGB());
-                    }
-                }
-                qrIcon = new javax.swing.ImageIcon(image);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+    JTextArea descArea = new JTextArea(3, 20);
 
-            model.addRow(new Object[]{name, email, password, role, house, qrIcon});
+    JPanel panel = new JPanel(new GridLayout(0, 1));
+    panel.add(new JLabel("Event Name:"));
+    panel.add(nameField);
+    panel.add(new JLabel("Event Date:"));
+    panel.add(datePicker);
+    panel.add(new JLabel("Start Time:"));
+    panel.add(startTimeSpinner);
+    panel.add(new JLabel("End Time:"));
+    panel.add(endTimeSpinner);
+    panel.add(new JLabel("Description:"));
+    panel.add(new JScrollPane(descArea));
+
+    int result = JOptionPane.showConfirmDialog(null, panel, "Add Event", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+        String name = nameField.getText().trim();
+        Date selectedDate = (Date) datePicker.getModel().getValue();
+        Date startTime = (Date) startTimeSpinner.getValue();
+        Date endTime = (Date) endTimeSpinner.getValue();
+        String desc = descArea.getText().trim();
+
+        if (name.isEmpty() || selectedDate == null || startTime == null || endTime == null) {
+            JOptionPane.showMessageDialog(null, "Please fill in all required fields.");
+            return;
         }
 
-        // Set row height to fit the QR code image
-        jTable2.setRowHeight(100);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-        javax.swing.JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "root", ""
+            );
+
+            String insertQuery = "INSERT INTO events (event_name, event_date, start_time, end_time, description) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(insertQuery);
+            stmt.setString(1, name);
+            stmt.setString(2, dateFormat.format(selectedDate));
+            stmt.setString(3, timeFormat.format(startTime));
+            stmt.setString(4, timeFormat.format(endTime));
+            stmt.setString(5, desc);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                JOptionPane.showMessageDialog(null, "Event added successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to add event.");
+            }
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage());
+        }
+    }
+
+    }//GEN-LAST:event_addEventActionPerformed
+
+    
+   class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Override
+    public Object stringToValue(String text) throws java.text.ParseException {
+        return dateFormatter.parseObject(text);
+    }
+
+    @Override
+    public String valueToString(Object value) {
+        if (value != null) {
+            Calendar cal = (Calendar) value;
+            return dateFormatter.format(cal.getTime());
+        }
+        return "";
     }
 }
 
@@ -1175,8 +1264,6 @@ jTable2.setRowHeight(100);
             eventPanel.repaint();
         }
 
-    
-    
     private void setupCalendarAndEvents() {
         JCalendar calendar = new JCalendar();
         calendarPanel.setLayout(new BorderLayout());
@@ -1194,18 +1281,19 @@ jTable2.setRowHeight(100);
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton accountsbutton;
+    public javax.swing.JButton accountsbutton;
     private javax.swing.JPanel accountspanel;
     private javax.swing.JButton add;
-    private javax.swing.JButton attendancebutton;
+    private javax.swing.JButton addEvent;
+    public javax.swing.JButton attendancebutton;
     private javax.swing.JPanel attendancepanel;
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JLabel camera;
     private javax.swing.JComboBox<String> change_cam;
-    private javax.swing.JButton dashboardbutton;
+    public javax.swing.JButton dashboardbutton;
     private javax.swing.JPanel dashboardpanel;
     private javax.swing.JPanel eventPanel;
-    private javax.swing.JButton eventsbutton;
+    public javax.swing.JButton eventsbutton;
     private javax.swing.JPanel eventspanel;
     private javax.swing.JComboBox<String> filters;
     private javax.swing.JLabel jLabel1;
@@ -1223,12 +1311,82 @@ jTable2.setRowHeight(100);
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTable jTable2;
+    public javax.swing.JTable jTable2;
     private javax.swing.JPanel mainpanel;
     private javax.swing.JPanel navbarpanel;
-    private javax.swing.JButton scanqrbutton;
+    public javax.swing.JButton scanqrbutton;
     private javax.swing.JPanel scanqrpanel;
     private javax.swing.JButton seachtxt;
     private javax.swing.JTextField searchtxt;
+    private javax.swing.JPanel viewAttendance;
     // End of variables declaration//GEN-END:variables
+
+
+ public void loadUserData() {
+    DefaultTableModel model = (DefaultTableModel) jTable2.getModel(); 
+    model.setRowCount(0); // Clear existing rows
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", ""  // your password
+        );
+
+        String query = "SELECT name, email, password, role, house, qr_code FROM users";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            String name = rs.getString("name");
+            String email = rs.getString("email");
+            String password = rs.getString("password");
+            String role = rs.getString("role");
+            String house = rs.getString("house");
+            String qrCode = rs.getString("qr_code");
+
+            // Generate QR code image as ImageIcon
+            ImageIcon qrIcon = null;
+            try {
+                com.google.zxing.Writer writer = new com.google.zxing.qrcode.QRCodeWriter();
+                com.google.zxing.common.BitMatrix matrix = writer.encode(qrCode, com.google.zxing.BarcodeFormat.QR_CODE, 100, 100);
+                java.awt.image.BufferedImage image = new java.awt.image.BufferedImage(100, 100, java.awt.image.BufferedImage.TYPE_INT_RGB);
+                for (int x = 0; x < 100; x++) {
+                    for (int y = 0; y < 100; y++) {
+                        image.setRGB(x, y, matrix.get(x, y) ? java.awt.Color.BLACK.getRGB() : java.awt.Color.WHITE.getRGB());
+                    }
+                }
+                qrIcon = new javax.swing.ImageIcon(image);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            model.addRow(new Object[]{name, email, password, role, house, qrIcon});
+        }
+
+        // Set row height to fit the QR code image
+        jTable2.setRowHeight(100);
+
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
