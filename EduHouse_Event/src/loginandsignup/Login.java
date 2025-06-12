@@ -197,6 +197,7 @@ public class Login extends javax.swing.JFrame {
                     LoginUserSession.userId = rs.getInt("user_id");
                     LoginUserSession.qrCode = rs.getString("qr_code");
                     LoginUserSession.role = rs.getString("role");
+                    LoginUserSession.house = rs.getString("house");
 
                     JOptionPane.showMessageDialog(this, "Login successful!");
                     this.dispose();

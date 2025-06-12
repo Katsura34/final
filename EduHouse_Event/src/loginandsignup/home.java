@@ -18,6 +18,8 @@ import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
@@ -39,7 +41,11 @@ import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -63,7 +69,7 @@ public class home extends javax.swing.JFrame {
     public home() {
         initComponents();
     
-        
+        loadDashboardData();
         
         
                       
@@ -193,10 +199,8 @@ jTable2.setRowHeight(100);
         attendancebutton = new javax.swing.JButton();
         scanqrbutton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        Logout = new javax.swing.JButton();
         mainpanel = new javax.swing.JPanel();
-        dashboardpanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         eventspanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         calendarPanel = new javax.swing.JPanel();
@@ -221,6 +225,9 @@ jTable2.setRowHeight(100);
         camera = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        dashboardpanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        dash = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -301,6 +308,16 @@ jTable2.setRowHeight(100);
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("EDUHOUSE EVENTS");
 
+        Logout.setBackground(new java.awt.Color(25, 42, 86));
+        Logout.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        Logout.setForeground(new java.awt.Color(255, 255, 255));
+        Logout.setText("Logout");
+        Logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout navbarpanelLayout = new javax.swing.GroupLayout(navbarpanel);
         navbarpanel.setLayout(navbarpanelLayout);
         navbarpanelLayout.setHorizontalGroup(
@@ -315,7 +332,8 @@ jTable2.setRowHeight(100);
                     .addComponent(eventsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(accountsbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(attendancebutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(scanqrbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(scanqrbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(navbarpanelLayout.createSequentialGroup()
                 .addGap(65, 65, 65)
@@ -339,6 +357,8 @@ jTable2.setRowHeight(100);
                 .addComponent(attendancebutton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scanqrbutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Logout)
                 .addContainerGap())
         );
 
@@ -346,34 +366,6 @@ jTable2.setRowHeight(100);
 
         mainpanel.setBackground(new java.awt.Color(255, 255, 255));
         mainpanel.setLayout(new java.awt.CardLayout());
-
-        dashboardpanel.setPreferredSize(new java.awt.Dimension(800, 600));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Dashboard");
-
-        javax.swing.GroupLayout dashboardpanelLayout = new javax.swing.GroupLayout(dashboardpanel);
-        dashboardpanel.setLayout(dashboardpanelLayout);
-        dashboardpanelLayout.setHorizontalGroup(
-            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardpanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(320, Short.MAX_VALUE))
-        );
-        dashboardpanelLayout.setVerticalGroup(
-            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(556, Short.MAX_VALUE))
-        );
-
-        mainpanel.add(dashboardpanel, "card6");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Events");
@@ -665,6 +657,46 @@ jTable2.setRowHeight(100);
 
         mainpanel.add(scanqrpanel, "card2");
 
+        dashboardpanel.setPreferredSize(new java.awt.Dimension(800, 600));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        javax.swing.GroupLayout dashLayout = new javax.swing.GroupLayout(dash);
+        dash.setLayout(dashLayout);
+        dashLayout.setHorizontalGroup(
+            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 691, Short.MAX_VALUE)
+        );
+        dashLayout.setVerticalGroup(
+            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 501, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout dashboardpanelLayout = new javax.swing.GroupLayout(dashboardpanel);
+        dashboardpanel.setLayout(dashboardpanelLayout);
+        dashboardpanelLayout.setHorizontalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addContainerGap(671, Short.MAX_VALUE))
+            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(dash, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        dashboardpanelLayout.setVerticalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(538, Short.MAX_VALUE))
+            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardpanelLayout.createSequentialGroup()
+                    .addGap(0, 43, Short.MAX_VALUE)
+                    .addComponent(dash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        mainpanel.add(dashboardpanel, "card6");
+
         jPanel2.add(mainpanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -687,6 +719,7 @@ jTable2.setRowHeight(100);
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
                 cl.show(mainpanel, "card6");
+                loadDashboardData();
                             stopCamera();
     }//GEN-LAST:event_dashboardbuttonActionPerformed
 
@@ -694,6 +727,7 @@ jTable2.setRowHeight(100);
         // TODO add your handling code here:                                             
             CardLayout cl = (CardLayout) mainpanel.getLayout();
             cl.show(mainpanel, "card3");  
+            loadAttendanceSummary();
             stopCamera();
     }//GEN-LAST:event_attendancebuttonActionPerformed
 
@@ -941,6 +975,28 @@ jTable2.setRowHeight(100);
 
     }//GEN-LAST:event_addEventActionPerformed
 
+    private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
+          int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        // Clear session data (optional)
+        LoginUserSession.userId = 0;
+        LoginUserSession.qrCode = null;
+        LoginUserSession.role = null;
+
+        // Close current window
+        this.dispose();
+
+        // Open login form again
+        Login loginFrame = new Login();
+        loginFrame.setVisible(true);
+        loginFrame.pack();
+        loginFrame.setLocationRelativeTo(null);
+    }
+
+    }//GEN-LAST:event_LogoutActionPerformed
+
+  
     
    class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -1281,6 +1337,7 @@ jTable2.setRowHeight(100);
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton Logout;
     public javax.swing.JButton accountsbutton;
     private javax.swing.JPanel accountspanel;
     private javax.swing.JButton add;
@@ -1290,6 +1347,7 @@ jTable2.setRowHeight(100);
     private javax.swing.JPanel calendarPanel;
     private javax.swing.JLabel camera;
     private javax.swing.JComboBox<String> change_cam;
+    private javax.swing.JPanel dash;
     public javax.swing.JButton dashboardbutton;
     private javax.swing.JPanel dashboardpanel;
     private javax.swing.JPanel eventPanel;
@@ -1308,7 +1366,6 @@ jTable2.setRowHeight(100);
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     public javax.swing.JTable jTable2;
@@ -1320,10 +1377,17 @@ jTable2.setRowHeight(100);
     private javax.swing.JTextField searchtxt;
     private javax.swing.JPanel viewAttendance;
     // End of variables declaration//GEN-END:variables
+private JTable upcomingEventsTable;
+private JLabel eventsAttendedLabel;
+private JLabel penaltiesLabel;
+private JTextArea notificationsArea;
 
 
- public void loadUserData() {
+public void loadUserData() {
     DefaultTableModel model = (DefaultTableModel) jTable2.getModel(); 
+    // Define columns including Edit and Delete
+    Vector<String> columns = new Vector<>(Arrays.asList("Name", "Email", "Password", "Role", "House", "QR", "Edit", "Delete"));
+    model.setColumnIdentifiers(columns);
     model.setRowCount(0); // Clear existing rows
 
     try {
@@ -1361,32 +1425,397 @@ jTable2.setRowHeight(100);
                 ex.printStackTrace();
             }
 
-            model.addRow(new Object[]{name, email, password, role, house, qrIcon});
+            // Add Edit and Delete buttons text as placeholders – actual buttons are rendered by renderer/editor
+            model.addRow(new Object[]{name, email, password, role, house, qrIcon, "Edit", "Delete"});
         }
 
         // Set row height to fit the QR code image
         jTable2.setRowHeight(100);
 
+        // Set font and colors
+        jTable2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        jTable2.setForeground(new Color(33, 33, 33));
+        jTable2.setGridColor(new Color(200, 200, 200));
+        jTable2.setShowGrid(true);
+        jTable2.setAutoCreateRowSorter(true);
+
+        // Set header font and background color
+        JTableHeader header = jTable2.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        header.setBackground(new Color(25, 42, 86));
+        header.setForeground(Color.WHITE);
+        header.setReorderingAllowed(false);
+        header.setResizingAllowed(true);
+
+        // Set column widths
+        int[] columnWidths = {150, 220, 150, 100, 100, 120, 70, 70};
+        for (int i = 0; i < columnWidths.length; i++) {
+            if (i < jTable2.getColumnModel().getColumnCount()) {
+                jTable2.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+            }
+        }
+
+        // QR code column renderer - center icon
+        jTable2.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                if (value instanceof ImageIcon) {
+                    JLabel label = new JLabel();
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    label.setIcon((ImageIcon) value);
+                    label.setOpaque(true);
+                    if (isSelected) {
+                        label.setBackground(table.getSelectionBackground());
+                    } else {
+                        label.setBackground(table.getBackground());
+                    }
+                    return label;
+                }
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+        
+
+
+
+
+        // Alternating row colors
+        jTable2.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(245, 245, 245));
+                }
+                return c;
+            }
+        });
+
+        conn.close();
+        // Add click listener for Edit and Delete buttons
+jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = jTable2.rowAtPoint(evt.getPoint());
+        int column = jTable2.columnAtPoint(evt.getPoint());
+
+        if (column == 6) { // Edit column
+            String email = (String) jTable2.getValueAt(row, 1);
+            openEditDialog(email);
+        } else if (column == 7) { // Delete column
+            String email = (String) jTable2.getValueAt(row, 1);
+            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure to delete: " + email + "?", "Confirm", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                deleteUser(email);
+                loadUserData(); // Refresh table
+            }
+        }
+    }
+});
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
+    }
+}
+
+private void openEditDialog(String email) {
+    try {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE email = ?");
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            JTextField nameField = new JTextField(rs.getString("name"));
+            JTextField passwordField = new JTextField(rs.getString("password"));
+            JComboBox<String> roleCombo = new JComboBox<>(new String[]{"admin", "committee", "student"});
+            roleCombo.setSelectedItem(rs.getString("role"));
+            JComboBox<String> houseCombo = new JComboBox<>(new String[]{"CAHEL", "VIERRDY", "AZUL", "GALLIO", "ROXXO"});
+            houseCombo.setSelectedItem(rs.getString("house"));
+
+            JPanel panel = new JPanel(new GridLayout(0, 1));
+            panel.add(new JLabel("Name:")); panel.add(nameField);
+            panel.add(new JLabel("Password:")); panel.add(passwordField);
+            panel.add(new JLabel("Role:")); panel.add(roleCombo);
+            panel.add(new JLabel("House:")); panel.add(houseCombo);
+
+            int result = JOptionPane.showConfirmDialog(null, panel, "Edit Account", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                PreparedStatement update = conn.prepareStatement(
+                    "UPDATE users SET name=?, password=?, role=?, house=? WHERE email=?"
+                );
+                update.setString(1, nameField.getText());
+                update.setString(2, passwordField.getText());
+                update.setString(3, (String) roleCombo.getSelectedItem());
+                update.setString(4, (String) houseCombo.getSelectedItem());
+                update.setString(5, email);
+                update.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Account updated!");
+                loadUserData();
+            }
+        }
+
         conn.close();
     } catch (Exception e) {
         e.printStackTrace();
-        javax.swing.JOptionPane.showMessageDialog(this, "Error loading user data: " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
     }
+}
 
+private void deleteUser(String email) {
+    try {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE email = ?");
+        stmt.setString(1, email);
+        stmt.executeUpdate();
+        conn.close();
+        JOptionPane.showMessageDialog(null, "Account deleted.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error deleting account: " + e.getMessage());
+    }
 }
 
 
+private void loadAttendanceSummary() {
+    viewAttendance.removeAll();
+    viewAttendance.setLayout(new BorderLayout());
+
+    String[] columns = {"Event", "Date", "Attendance"};
+    DefaultTableModel model = new DefaultTableModel(columns, 0);
+    JTable attendanceTable = new JTable(model);
+    JScrollPane scrollPane = new JScrollPane(attendanceTable);
+    attendanceTable.setRowHeight(30);
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", ""
+        );
+
+        // Get the user's house
+        String userHouse = LoginUserSession.house;  // Make sure this is set at login
+
+        String query = """
+            SELECT e.event_id, e.event_name, e.event_date,
+                (SELECT COUNT(*) FROM event_attendance ea 
+                    JOIN users u ON ea.user_id = u.user_id 
+                    WHERE ea.event_id = e.event_id AND u.house = ?) AS attendees,
+                (SELECT COUNT(*) FROM users u WHERE u.role = 'student' AND u.house = ?) AS total_members
+            FROM events e
+            ORDER BY e.event_date DESC
+        """;
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, userHouse);
+        stmt.setString(2, userHouse);
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            String eventName = rs.getString("event_name");
+            String eventDate = rs.getString("event_date");
+            int attendees = rs.getInt("attendees");
+            int total = rs.getInt("total_members");
+
+            model.addRow(new Object[]{
+                eventName,
+                eventDate,
+                attendees + " / " + total
+            });
+        }
+
+        conn.close();
+        attendanceTable.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = attendanceTable.rowAtPoint(evt.getPoint());
+        if (row >= 0) {
+            String eventName = attendanceTable.getValueAt(row, 0).toString();
+            showAttendanceModal(eventName);
+        }
+    }
+});
+
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading attendance: " + e.getMessage());
+    }
+
+    viewAttendance.add(scrollPane, BorderLayout.CENTER);
+    viewAttendance.revalidate();
+    viewAttendance.repaint();
+}
+
+private void showAttendanceModal(String eventName) {
+    JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Attendance for: " + eventName, true);
+    dialog.setLayout(new BorderLayout());
+
+    String[] columns = {"Student Name", "Email", "Status"};
+    DefaultTableModel model = new DefaultTableModel(columns, 0);
+    JTable table = new JTable(model);
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", ""
+        );
+
+        String sql = """
+            SELECT u.name, u.email, ea.status
+            FROM event_attendance ea
+            JOIN users u ON u.user_id = ea.user_id
+            JOIN events e ON e.event_id = ea.event_id
+            WHERE e.event_name = ? AND u.house = ?
+        """;
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, eventName);
+        stmt.setString(2, LoginUserSession.house); // ensure this is set
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("status")
+            });
+        }
+
+        conn.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error fetching attendees: " + e.getMessage());
+    }
+
+    JScrollPane scrollPane = new JScrollPane(table);
+    dialog.add(scrollPane, BorderLayout.CENTER);
+
+    // Add a print button
+    JButton printBtn = new JButton("Print Attendance");
+    printBtn.addActionListener(e -> {
+        try {
+            boolean complete = table.print();
+            if (complete) {
+                JOptionPane.showMessageDialog(dialog, "Printing Complete!");
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Printing Cancelled");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(dialog, "Print Error: " + ex.getMessage());
+        }
+    });
+
+    JPanel bottomPanel = new JPanel();
+    bottomPanel.add(printBtn);
+    dialog.add(bottomPanel, BorderLayout.SOUTH);
+
+    dialog.setSize(600, 400);
+    dialog.setLocationRelativeTo(this);
+    dialog.setVisible(true);
+}
+
+ 
 
 
 
 
+private void loadDashboardData() {
+    dash.removeAll(); // Clear panel
+    dash.setLayout(new BorderLayout());
 
+    // Title
+    JLabel titleLabel = new JLabel("Upcoming Events");
+    titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+    titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    dash.add(titleLabel, BorderLayout.NORTH);
 
+    // Table
+    String[] columns = {"Event Name", "Date", "Time", "Status"};
+    DefaultTableModel model = new DefaultTableModel(columns, 0);
+    upcomingEventsTable = new JTable(model);
+    upcomingEventsTable.setRowHeight(28);
+    JScrollPane tableScroll = new JScrollPane(upcomingEventsTable);
+    dash.add(tableScroll, BorderLayout.CENTER);
 
+    // Bottom Panel with Stats and Notifications
+    JPanel bottomPanel = new JPanel(new BorderLayout());
 
+    JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    eventsAttendedLabel = new JLabel("0");
+    eventsAttendedLabel.setForeground(Color.GREEN);
+    penaltiesLabel = new JLabel("0");
+    penaltiesLabel.setForeground(Color.RED);
 
+    statsPanel.add(new JLabel("Total Events Attended: "));
+    statsPanel.add(eventsAttendedLabel);
+    statsPanel.add(Box.createHorizontalStrut(20));
+    statsPanel.add(new JLabel("Total Penalties: "));
+    statsPanel.add(penaltiesLabel);
 
+    bottomPanel.add(statsPanel, BorderLayout.NORTH);
 
+    notificationsArea = new JTextArea(5, 40);
+    notificationsArea.setEditable(false);
+    JScrollPane notifScroll = new JScrollPane(notificationsArea);
+    notifScroll.setBorder(BorderFactory.createTitledBorder("Notifications"));
+    bottomPanel.add(notifScroll, BorderLayout.CENTER);
+
+    dash.add(bottomPanel, BorderLayout.SOUTH);
+
+    // Load data from DB
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db", "root", "")) {
+        String query = """
+                SELECT e.event_name, e.event_date, e.start_time,
+                    IF(ea.user_id IS NOT NULL, 'Attended',
+                    IF(CURDATE() > e.event_date, 'Missed', 'Upcoming')) AS status
+                FROM events e
+                LEFT JOIN event_attendance ea ON ea.event_id = e.event_id AND ea.user_id = ?
+                WHERE e.event_date >= CURDATE()  -- ✅ Show only today and future events
+                ORDER BY e.event_date ASC
+            """;
+
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setInt(1, LoginUserSession.userId);
+        ResultSet rs = stmt.executeQuery();
+
+        int attended = 0, penalties = 0;
+        model.setRowCount(0);
+        notificationsArea.setText("");
+
+        while (rs.next()) {
+            String name = rs.getString("event_name");
+            String date = rs.getString("event_date");
+            String time = rs.getString("start_time");
+            String status = rs.getString("status");
+
+            model.addRow(new Object[]{name, date, time, status});
+
+            if ("Attended".equals(status)) attended++;
+            else if ("Missed".equals(status)) {
+                penalties++;
+                notificationsArea.append("• " + name + " - Penalty Pending\n");
+            }
+        }
+
+        eventsAttendedLabel.setText(String.valueOf(attended));
+        penaltiesLabel.setText(String.valueOf(penalties));
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading dashboard: " + e.getMessage());
+    }
+
+    dash.revalidate();
+    dash.repaint();
+}
 
 
 }
