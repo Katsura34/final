@@ -69,7 +69,6 @@ public class home extends javax.swing.JFrame {
     public home() {
         initComponents();
     
-        loadDashboardData();
         
         
                       
@@ -147,7 +146,7 @@ public class home extends javax.swing.JFrame {
 
 jTable2.setRowHeight(100); 
 
-
+addEvent.setVisible(false);
 
              String role = LoginUserSession.role;
        if ("admin".equalsIgnoreCase(role)) {
@@ -157,6 +156,7 @@ jTable2.setRowHeight(100);
     accountsbutton.setVisible(true);
     attendancebutton.setVisible(true);
     scanqrbutton.setVisible(false);
+    addEvent.setVisible(true);
     
 } else if ("committee".equalsIgnoreCase(role)) {
     dashboardbutton.setVisible(true);
@@ -173,6 +173,7 @@ jTable2.setRowHeight(100);
     scanqrbutton.setVisible(false);
 }
    
+        loadDashboardData();
 
     }
 
@@ -201,6 +202,9 @@ jTable2.setRowHeight(100);
         jLabel7 = new javax.swing.JLabel();
         Logout = new javax.swing.JButton();
         mainpanel = new javax.swing.JPanel();
+        dashboardpanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        dash = new javax.swing.JPanel();
         eventspanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         calendarPanel = new javax.swing.JPanel();
@@ -225,9 +229,6 @@ jTable2.setRowHeight(100);
         camera = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        dashboardpanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        dash = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -366,6 +367,46 @@ jTable2.setRowHeight(100);
 
         mainpanel.setBackground(new java.awt.Color(255, 255, 255));
         mainpanel.setLayout(new java.awt.CardLayout());
+
+        dashboardpanel.setPreferredSize(new java.awt.Dimension(800, 600));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
+        javax.swing.GroupLayout dashLayout = new javax.swing.GroupLayout(dash);
+        dash.setLayout(dashLayout);
+        dashLayout.setHorizontalGroup(
+            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 691, Short.MAX_VALUE)
+        );
+        dashLayout.setVerticalGroup(
+            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 501, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout dashboardpanelLayout = new javax.swing.GroupLayout(dashboardpanel);
+        dashboardpanel.setLayout(dashboardpanelLayout);
+        dashboardpanelLayout.setHorizontalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addContainerGap(671, Short.MAX_VALUE))
+            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(dash, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        dashboardpanelLayout.setVerticalGroup(
+            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(dashboardpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(538, Short.MAX_VALUE))
+            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardpanelLayout.createSequentialGroup()
+                    .addGap(0, 43, Short.MAX_VALUE)
+                    .addComponent(dash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        mainpanel.add(dashboardpanel, "card6");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Events");
@@ -657,46 +698,6 @@ jTable2.setRowHeight(100);
 
         mainpanel.add(scanqrpanel, "card2");
 
-        dashboardpanel.setPreferredSize(new java.awt.Dimension(800, 600));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-
-        javax.swing.GroupLayout dashLayout = new javax.swing.GroupLayout(dash);
-        dash.setLayout(dashLayout);
-        dashLayout.setHorizontalGroup(
-            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 691, Short.MAX_VALUE)
-        );
-        dashLayout.setVerticalGroup(
-            dashLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 501, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout dashboardpanelLayout = new javax.swing.GroupLayout(dashboardpanel);
-        dashboardpanel.setLayout(dashboardpanelLayout);
-        dashboardpanelLayout.setHorizontalGroup(
-            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardpanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addContainerGap(671, Short.MAX_VALUE))
-            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(dash, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        dashboardpanelLayout.setVerticalGroup(
-            dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dashboardpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(538, Short.MAX_VALUE))
-            .addGroup(dashboardpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, dashboardpanelLayout.createSequentialGroup()
-                    .addGap(0, 43, Short.MAX_VALUE)
-                    .addComponent(dash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        );
-
-        mainpanel.add(dashboardpanel, "card6");
-
         jPanel2.add(mainpanel, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -770,8 +771,8 @@ jTable2.setRowHeight(100);
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-            "root", ""
+            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", "jesonmysql"
         );
 
         String query;
@@ -863,8 +864,8 @@ jTable2.setRowHeight(100);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-                "root", ""
+                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "root", "jesonmysql"
             );
             String insert = "INSERT INTO users (name, email, password, role, house, qr_code) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(insert);
@@ -947,8 +948,8 @@ jTable2.setRowHeight(100);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-                "root", ""
+                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "root", "jesonmysql"
             );
 
             String insertQuery = "INSERT INTO events (event_name, event_date, start_time, end_time, description) VALUES (?, ?, ?, ?, ?)";
@@ -1127,7 +1128,7 @@ jTable2.setRowHeight(100);
     private boolean checkQRCodeInDatabase(String qrText, int eventId) {
     boolean exists = false;
 
-    String url = "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    String url = "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
     String user = "root";
     String password = "";
 
@@ -1201,8 +1202,8 @@ jTable2.setRowHeight(100);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-                    "root", "");  // use your credentials
+                    "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                    "root", "jesonmysql");  // use your credentials
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String sqlDate = sdf.format(date);
@@ -1393,8 +1394,8 @@ public void loadUserData() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-            "root", ""  // your password
+            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", "jesonmysql"  // your password
         );
 
         String query = "SELECT name, email, password, role, house, qr_code FROM users";
@@ -1524,7 +1525,7 @@ jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
 
 private void openEditDialog(String email) {
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE email = ?");
         stmt.setString(1, email);
         ResultSet rs = stmt.executeQuery();
@@ -1569,7 +1570,7 @@ private void openEditDialog(String email) {
 
 private void deleteUser(String email) {
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE email = ?");
         stmt.setString(1, email);
         stmt.executeUpdate();
@@ -1595,8 +1596,8 @@ private void loadAttendanceSummary() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-            "root", ""
+            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "root", "jesonmysql"
         );
 
         // Get the user's house
@@ -1662,33 +1663,31 @@ private void showAttendanceModal(String eventName) {
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
-            "root", ""
-        );
-
-        String sql = """
-            SELECT u.name, u.email, ea.status
-            FROM event_attendance ea
-            JOIN users u ON u.user_id = ea.user_id
-            JOIN events e ON e.event_id = ea.event_id
-            WHERE e.event_name = ? AND u.house = ?
-        """;
-
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, eventName);
-        stmt.setString(2, LoginUserSession.house); // ensure this is set
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getString("name"),
-                rs.getString("email"),
-                rs.getString("status")
-            });
+        try (Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "root", "jesonmysql"
+        )) {
+            String sql = """
+                                         SELECT u.name, u.email, ea.status
+                                         FROM event_attendance ea
+                                         JOIN users u ON u.user_id = ea.user_id
+                                         JOIN events e ON e.event_id = ea.event_id
+                                         WHERE e.event_name = ? AND u.house = ?
+                                     """;
+            
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, eventName);
+            stmt.setString(2, LoginUserSession.house); // ensure this is set
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("status")
+                });
+            }
         }
-
-        conn.close();
     } catch (Exception e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error fetching attendees: " + e.getMessage());
@@ -1721,11 +1720,6 @@ private void showAttendanceModal(String eventName) {
     dialog.setLocationRelativeTo(this);
     dialog.setVisible(true);
 }
-
- 
-
-
-
 
 private void loadDashboardData() {
     dash.removeAll(); // Clear panel
@@ -1771,7 +1765,7 @@ private void loadDashboardData() {
     dash.add(bottomPanel, BorderLayout.SOUTH);
 
     // Load data from DB
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_event_db", "root", "")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql")) {
         String query = """
                 SELECT e.event_name, e.event_date, e.start_time,
                     IF(ea.user_id IS NOT NULL, 'Attended',
