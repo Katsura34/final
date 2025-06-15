@@ -182,7 +182,7 @@ public class Login extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             try (Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                    "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
                     "root", "jesonmysql")) {
 
                 String query = "SELECT * FROM users WHERE email=? AND password=?";

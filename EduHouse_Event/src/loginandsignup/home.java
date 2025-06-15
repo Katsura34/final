@@ -771,7 +771,7 @@ addEvent.setVisible(false);
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
             "root", "jesonmysql"
         );
 
@@ -864,7 +864,7 @@ addEvent.setVisible(false);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
                 "root", "jesonmysql"
             );
             String insert = "INSERT INTO users (name, email, password, role, house, qr_code) VALUES (?, ?, ?, ?, ?, ?)";
@@ -948,7 +948,7 @@ addEvent.setVisible(false);
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
                 "root", "jesonmysql"
             );
 
@@ -1128,7 +1128,7 @@ addEvent.setVisible(false);
     private boolean checkQRCodeInDatabase(String qrText, int eventId) {
     boolean exists = false;
 
-    String url = "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    String url = "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL";
     String user = "root";
     String password = "";
 
@@ -1202,7 +1202,7 @@ addEvent.setVisible(false);
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                    "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
                     "root", "jesonmysql");  // use your credentials
 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1394,7 +1394,7 @@ public void loadUserData() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
             "root", "jesonmysql"  // your password
         );
 
@@ -1525,7 +1525,7 @@ jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
 
 private void openEditDialog(String email) {
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM users WHERE email = ?");
         stmt.setString(1, email);
         ResultSet rs = stmt.executeQuery();
@@ -1570,7 +1570,7 @@ private void openEditDialog(String email) {
 
 private void deleteUser(String email) {
     try {
-        Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql");
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE email = ?");
         stmt.setString(1, email);
         stmt.executeUpdate();
@@ -1596,7 +1596,7 @@ private void loadAttendanceSummary() {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-            "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+            "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
             "root", "jesonmysql"
         );
 
@@ -1664,7 +1664,7 @@ private void showAttendanceModal(String eventName) {
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
+                "jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL",
                 "root", "jesonmysql"
         )) {
             String sql = """
@@ -1765,7 +1765,7 @@ private void loadDashboardData() {
     dash.add(bottomPanel, BorderLayout.SOUTH);
 
     // Load data from DB
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://35.194.247.42:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/java_event_db?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "jesonmysql")) {
         String query = """
                 SELECT e.event_name, e.event_date, e.start_time,
                     IF(ea.user_id IS NOT NULL, 'Attended',
